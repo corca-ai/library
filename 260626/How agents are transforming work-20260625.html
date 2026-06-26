@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 에이전트는 어떻게 일하는 방식을 바꾸고 있는가 — OpenAI (한국어 번역)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+KR:wght@500;600&display=swap">
+<style>
+  :root{
+    --paper:#F4F5F3;
+    --surface:#FFFFFF;
+    --ink:#16181C;
+    --ink-2:#5B6066;
+    --line:#E4E6E1;
+    --accent:#0F5A4E;
+    --accent-rgb:15,90,78;
+    --accent-soft:#DCEDE8;
+    --sans:'Pretendard Variable',Pretendard,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    --serif:'Noto Serif KR','Nanum Myeongjo',serif;
+    --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .wrap{
+    width:min(92vw,720px);
+    margin:0 auto;
+    padding:clamp(2.2rem,6vw,4.5rem) 0 4rem;
+  }
+  .col{width:min(100%,660px);margin-inline:auto;}
+
+  /* ---------- masthead ---------- */
+  .masthead{margin-bottom:2.4rem;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 1.3rem;
+  }
+  h1{
+    font-family:var(--sans);
+    font-weight:800;
+    font-size:clamp(2rem,6.2vw,3.05rem);
+    line-height:1.2;
+    letter-spacing:-.01em;
+    margin:0 0 1.2rem;
+    word-break:keep-all;
+  }
+  .dek{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(1.12rem,2.6vw,1.36rem);
+    line-height:1.72;
+    color:#33373d;
+    margin:0 0 1.8rem;
+    word-break:keep-all;
+  }
+  .meta{
+    display:flex;flex-wrap:wrap;gap:.4rem 1.1rem;align-items:center;
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.02em;color:var(--ink-2);
+    padding-top:1.3rem;border-top:1px solid var(--line);
+  }
+  .meta a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;}
+  .meta a:hover{border-bottom-color:var(--accent);}
+
+  /* ---------- translator note ---------- */
+  .tnote{
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    background:var(--surface);
+    border-radius:2px;
+    padding:1.15rem 1.3rem;
+    margin:2.2rem 0 3.2rem;
+    font-size:.92rem;
+    line-height:1.75;
+    color:#33373d;
+    word-break:keep-all;
+  }
+  .tnote .tnote-h{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);display:block;margin-bottom:.55rem;
+  }
+  .tnote a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent);white-space:nowrap;}
+  .tnote .links{margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;}
+
+  /* ---------- body ---------- */
+  .body{word-break:keep-all;}
+  .body p{margin:0 0 1.18em;}
+  .body h2{
+    font-weight:700;
+    font-size:clamp(1.34rem,3.4vw,1.78rem);
+    line-height:1.34;
+    letter-spacing:-.005em;
+    margin:2.9em 0 .7em;
+    padding-top:.2em;
+    position:relative;
+  }
+  .body h2::before{
+    content:"";position:absolute;left:0;top:-.55em;
+    width:34px;height:3px;background:var(--accent);border-radius:2px;
+  }
+  .lede-first::first-letter{}
+
+  /* four trends list */
+  ul.trends{list-style:none;padding:0;margin:1.6em 0 .4em;counter-reset:t;}
+  ul.trends li{
+    position:relative;padding:0 0 1.15em 2.4rem;margin:0;
+    border-bottom:1px solid var(--line);counter-increment:t;
+  }
+  ul.trends li:first-child{padding-top:.2em;}
+  ul.trends li:last-child{border-bottom:none;}
+  ul.trends li::before{
+    content:counter(t,decimal-leading-zero);
+    position:absolute;left:0;top:.05em;
+    font-family:var(--mono);font-weight:700;font-size:.8rem;color:var(--accent);
+    letter-spacing:.02em;
+  }
+  ul.trends b{font-weight:700;}
+
+  /* ---------- footnote markers ---------- */
+  sup.fnref{font-family:var(--mono);font-size:.62em;font-weight:500;line-height:0;top:-.6em;margin-left:.12em;}
+  sup.fnref a{
+    color:var(--accent);text-decoration:none;
+    padding:.08em .22em;border-radius:3px;
+  }
+  sup.fnref a:hover{background:var(--accent-soft);}
+  .fnref{scroll-margin-top:90px;}
+
+  /* ---------- data callout (bars) ---------- */
+  figure.callout{margin:2em 0;padding:1.4rem 1.4rem 1.5rem;background:var(--surface);border:1px solid var(--line);border-radius:3px;}
+  .callout-cap{font-size:.82rem;color:var(--ink-2);margin-bottom:1.1rem;line-height:1.6;}
+  .callout-cap span{font-family:var(--mono);font-size:.74rem;color:var(--accent);}
+  .bar-row{display:grid;grid-template-columns:6.2rem 1fr 3.6rem;align-items:center;gap:.7rem;margin:.55rem 0;}
+  .bar-label{font-size:.85rem;color:#3a3e44;}
+  .bar-track{height:12px;background:#EDF1EF;border-radius:6px;overflow:hidden;}
+  .bar-fill{display:block;height:100%;background:var(--accent);border-radius:6px;transform-origin:left center;}
+  .bar-val{font-family:var(--mono);font-size:.85rem;font-weight:500;text-align:right;color:var(--ink);}
+
+  /* ---------- heat-map table ---------- */
+  .table-wrap{margin:1.9em 0 1.1em;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .table-title{font-weight:700;font-size:1.02rem;margin:.2em 0 .9em;}
+  table.heat{border-collapse:collapse;width:100%;min-width:540px;font-size:.86rem;}
+  table.heat th,table.heat td{padding:.62rem .55rem;text-align:center;border-bottom:1px solid var(--line);}
+  table.heat thead th{
+    font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.02em;
+    color:var(--ink-2);text-transform:none;vertical-align:bottom;border-bottom:2px solid var(--ink);
+  }
+  table.heat thead th.grp{color:var(--accent);text-align:right;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding-bottom:.2rem;}
+  table.heat tbody th{text-align:left;font-weight:600;color:var(--ink);white-space:nowrap;}
+  table.heat td{font-family:var(--mono);font-weight:500;color:var(--ink);}
+  .table-cap{font-size:.78rem;color:var(--ink-2);margin:.7em 0 0;font-family:var(--mono);letter-spacing:.01em;}
+
+  /* ---------- notes ---------- */
+  .notes-sec{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--ink);}
+  .notes-sec h2{
+    font-family:var(--mono);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin:0 0 1.6rem;
+  }
+  ol.notes{list-style:none;margin:0;padding:0;counter-reset:n;}
+  li.note{
+    display:grid;grid-template-columns:2.2rem 1fr;gap:.2rem .8rem;
+    padding:.95rem 0;border-bottom:1px solid var(--line);
+    scroll-margin-top:24px;border-radius:3px;
+  }
+  li.note:last-child{border-bottom:none;}
+  .note-num{font-family:var(--mono);font-weight:700;font-size:.92rem;color:var(--accent);padding-top:.05em;}
+  .note-body{font-size:.93rem;line-height:1.72;color:#2d3137;word-break:keep-all;}
+  .note-tag{
+    display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+    color:#fff;background:var(--ink-2);border-radius:3px;padding:.12em .45em;margin-right:.45em;vertical-align:.08em;
+  }
+  .note-tag.src{background:var(--accent);}
+  .note-term{font-weight:700;color:var(--ink);}
+  a.note-back{
+    margin-left:.4em;color:var(--accent);text-decoration:none;font-size:1.02em;
+    border-bottom:none;white-space:nowrap;
+  }
+  a.note-back:hover{color:#0a3d35;}
+
+  /* target glow (both directions) */
+  @media (prefers-reduced-motion:no-preference){
+    li.note:target{animation:glow 1.8s ease;}
+    sup.fnref:target a{animation:pglow 1.8s ease;}
+    .bar-fill{animation:grow .9s cubic-bezier(.2,.7,.2,1) both;}
+    .bar-row:nth-child(2) .bar-fill{animation-delay:.08s;}
+    .bar-row:nth-child(3) .bar-fill{animation-delay:.16s;}
+    .masthead{animation:rise .7s ease both;}
+  }
+  li.note:target{background:var(--accent-soft);box-shadow:-3px 0 0 var(--accent);}
+  @keyframes glow{0%{background:var(--accent-soft);}100%{background:var(--accent-soft);}}
+  @keyframes pglow{0%{background:var(--accent-soft);}70%{background:var(--accent-soft);}100%{background:transparent;}}
+  @keyframes grow{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+  @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  /* ---------- footer ---------- */
+  footer{margin-top:3.2rem;padding-top:1.5rem;border-top:1px solid var(--line);
+    font-size:.8rem;line-height:1.7;color:var(--ink-2);word-break:keep-all;}
+  footer a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--line);}
+
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+
+  @media (max-width:560px){
+    body{font-size:16px;}
+    .bar-row{grid-template-columns:5rem 1fr 3.1rem;}
+    li.note{grid-template-columns:1.7rem 1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="col">
+
+    <!-- ===== MASTHEAD ===== -->
+    <header class="masthead">
+      <p class="eyebrow">OpenAI · 경제 연구(Economic Research) · 2026.06.25</p>
+      <h1>AI 에이전트는 어떻게 일하는 방식을 바꾸고 있는가</h1>
+      <p class="dek">Codex가 최첨단 현장에서 지닌 경제적 잠재력을 측정한, OpenAI의 새로운 경제 연구 논문.</p>
+      <div class="meta">
+        <span>글 · OpenAI</span>
+        <span>분류 · 회사 소식</span>
+        <a href="https://openai.com/index/how-agents-are-transforming-work/" target="_blank" rel="noopener">원문 보기 →</a>
+      </div>
+    </header>
+
+    <!-- ===== TRANSLATOR NOTE ===== -->
+    <aside class="tnote">
+      <span class="tnote-h">옮긴이의 안내</span>
+      이 글은 OpenAI가 2026년 6월 25일 공개한 「How agents are transforming work」를 한국어로 옮긴 비공식 번역입니다.
+      본문 속 작은 번호(예: <sup class="fnref"><a href="#note-1">1</a></sup>)를 누르면 맨 아래 ‘주(註) · 용어 풀이’의 해당 항목으로 이동하고,
+      풀이 끝의 <strong>↩</strong> 표시를 누르면 읽던 자리로 그대로 돌아옵니다.
+      번호 <strong>7</strong>·<strong>8</strong>은 원문에 실린 각주이고, 나머지는 이해를 돕기 위해 옮긴이가 붙인 용어 설명입니다.
+      <div class="links">
+        <a href="https://openai.com/index/how-agents-are-transforming-work/" target="_blank" rel="noopener">원문 페이지 →</a>
+        <a href="https://cdn.openai.com/pdf/5d1e1489-21c0-43e4-9d42-f87efdbf0082/the-shift-to-agentic-ai-evidence-from-codex.pdf" target="_blank" rel="noopener">연구 논문(PDF) →</a>
+      </div>
+    </aside>
+
+    <!-- ===== BODY ===== -->
+    <article class="body">
+
+      <p>에이전트형 AI<sup class="fnref" id="ref-1"><a href="#note-1" aria-label="주 1 보기">1</a></sup>는 지식 노동<sup class="fnref" id="ref-2"><a href="#note-2" aria-label="주 2 보기">2</a></sup>의 기본 단위를 ‘한 번의 대화’에서 ‘맡겨 두는 긴 호흡의 과제’로 바꿔 놓고 있습니다. 챗봇과의 대화는 대체로 짧고 그 자리에서 끝나는 경우가 많습니다. 반면 에이전트는 여러 도구를 직접 불러 쓰고<sup class="fnref" id="ref-3"><a href="#note-3" aria-label="주 3 보기">3</a></sup>, 주어진 환경과 주고받으며, 해답에 이를 때까지 스스로 작업을 거듭하면서 수 분에서 수 시간 동안 독립적으로 일할 수 있습니다. 그 결과 에이전트는 빠르게 가장 강력한 업무용 AI 도구로 자리 잡고 있습니다.</p>
+
+      <p>지난 한 해 동안 우리 OpenAI는 이 변화를 직접 겪었습니다. Codex<sup class="fnref" id="ref-4"><a href="#note-4" aria-label="주 4 보기">4</a></sup>가 일반에 공개된 뒤 처음 몇 달 동안은 회사 안에서도 여전히 ChatGPT가 기본 업무 도구였습니다. 2025년 8월까지만 해도 OpenAI 직원이 쓰는 토큰<sup class="fnref" id="ref-5"><a href="#note-5" aria-label="주 5 보기">5</a></sup> 가운데 Codex에 들이는 비중은 평균 10%에도 미치지 못했습니다. 그런데 지금은 법무팀이나 채용팀처럼 기술 직군이 아닌 부서까지 포함해 모든 부서가 Codex를 주력 업무 도구로 쓰고 있습니다. 우리는 에이전트 도구의 성능과 접근성이 한층 좋아진 만큼, 이런 흐름이 곧 다가올 ‘일의 미래’를 보여 준다고 봅니다.</p>
+
+      <p>Codex의 확산은 그 성능 향상과 발맞춰 함께 이루어졌습니다. Codex가 더 강력한 모델과 새로운 기능을 갖추면서, 처리할 수 있는 생산적 업무의 폭도 점점 넓어졌기 때문입니다. 우리는 개인 사용자, 조직(기업) 사용자, 그리고 OpenAI 직원 전반에 걸쳐 지난 한 해 동안 나타난 네 가지 흐름을 정리했습니다.</p>
+
+      <ul class="trends">
+        <li><b>사람들은 Codex를 점점 더 긴 호흡의 작업에 사용합니다.</b><sup class="fnref" id="ref-6"><a href="#note-6" aria-label="주 6 보기">6</a></sup> 2026년 5월 기준, 표본으로 뽑은 개인 사용자의 80.6%가 사람이 하면 30분 넘게 걸릴 작업을 한 번 이상 Codex에 맡겼고, 70.2%는 1시간을 넘길 작업을, 25.6%는 무려 8시간을 넘길 작업을 한 번 이상 요청했습니다.</li>
+        <li><b>Codex는 OpenAI 모든 부서의 주력 AI 도구가 되었습니다.</b> 엔지니어링 부서가 가장 먼저 옮겨 갔지만, 법무·재무·채용 부서도 2026년 4월 무렵 Codex를 주력 도구로 삼는 단계에 들어섰습니다. 이제 OpenAI 직원이 만들어 내는 출력 토큰의 85% 이상이 Codex에서 나옵니다. 게다가 Codex 사용자는 그렇지 않은 사람보다 토큰을 더 많이 쓰는 경향이 있어, 전체 토큰에서 차지하는 비중은 더욱 높습니다. 회사 안에서 한 주 동안 생성되는 출력 토큰의 99.8%가 Codex에서 나올 정도입니다.</li>
+        <li><b>비(非)개발자의 도입이 특히 빠르게 늘어, 개발자의 도입 속도를 앞질렀습니다.</b> 2025년 8월 이후 비개발자 사용자는 개인 사용자에서 137배, 조직 사용자에서 189배, OpenAI 내부에서 12배 늘었습니다.</li>
+        <li><b>Codex 덕분에 직원들은 자기 직무 범위 밖의 일까지 해낼 수 있게 되었습니다.</b> 기술적 활용은 여전히 엔지니어 사이에서 가장 흔하지만, 비기술 직군 사용자도 자동화, 데이터 변환, 도구 제작, 디버깅, 정형화된 분석 같은 코딩·기술 작업을 일상적으로 Codex에 맡기고 있습니다.</li>
+      </ul>
+
+      <h2>에이전트는 더 어려운 일을 더 오래 합니다</h2>
+
+      <p>Codex에 들어오는 전체 요청 가운데 약 4분의 1은, 사람이 직접 하면 1시간 넘게 걸릴 작업입니다.<sup class="fnref" id="ref-7"><a href="#note-7" aria-label="주 7 보기">7</a></sup> Codex가 긴 맥락을 다루며 독립적으로 일하는 능력이 좋아지면서, 사용자들은 짧은 대화에서 벗어나 호흡이 길고 더 어려운 작업으로 옮겨 갔습니다.</p>
+
+      <p>아래 그래프는 ‘사람 기준 소요 시간’의 네 가지 기준선 — 30분 초과, 1시간 초과, 4시간 초과, 8시간 초과 — 을 넘긴 개인 사용자의 비율을 추정한 것입니다.<sup class="fnref" id="ref-8"><a href="#note-8" aria-label="주 8 보기">8</a></sup> 2025년 12월부터 2026년 5월 사이, 사람이 하면 30분을 넘길 작업을 요청한 사용자 비율은 80.6%까지 올랐습니다. 1시간을 넘길 작업을 요청한 비율은 70.2%로 늘었고, 8시간을 넘길 작업을 요청한 비율은 시작점이 낮았던 만큼 가장 빠르게 증가했습니다.</p>
+
+      <figure class="callout">
+        <figcaption class="callout-cap">사람 기준 소요 시간 기준선을 넘긴 개인 사용자 비율 <span>· 2026년 5월</span></figcaption>
+        <div class="bars">
+          <div class="bar-row"><span class="bar-label">30분 초과</span><span class="bar-track"><span class="bar-fill" style="width:80.6%"></span></span><span class="bar-val">80.6%</span></div>
+          <div class="bar-row"><span class="bar-label">1시간 초과</span><span class="bar-track"><span class="bar-fill" style="width:70.2%"></span></span><span class="bar-val">70.2%</span></div>
+          <div class="bar-row"><span class="bar-label">8시간 초과</span><span class="bar-track"><span class="bar-fill" style="width:25.6%"></span></span><span class="bar-val">25.6%</span></div>
+        </div>
+      </figure>
+
+      <p>에이전트 활용이 늘어나는 모습은 하루 단위 Codex 가동 시간에서도 드러납니다. OpenAI의 일간 활성 사용자 가운데 가장 많이 쓰는 사람들은 하루에도 여러 시간 분량의 에이전트 작업을 Codex에 맡깁니다. 2026년 6월 기준 상위 1% 사용자<sup class="fnref" id="ref-9"><a href="#note-9" aria-label="주 9 보기">9</a></sup>는 하루에 60시간이 넘는 Codex 에이전트 작업을 일상적으로 만들어 냈는데, 이는 여러 개의 에이전트를 동시에 병렬로 돌린 결과입니다.<sup class="fnref" id="ref-10"><a href="#note-10" aria-label="주 10 보기">10</a></sup> Codex가 더 강력해지고 병렬 처리가 가능해지면서, 사용자들은 한 번에 답 하나만 받던 방식에서 벗어나 하루 동안 여러 에이전트 작업을 한꺼번에 지휘·조율하는 방향으로 나아갔습니다.</p>
+
+      <h2>도입은 엔지니어에서 OpenAI 전체로 계속 번지고 있습니다</h2>
+
+      <p>OpenAI의 엔지니어들이 가장 먼저, 그리고 서서히 Codex를 쓰기 시작했습니다. 회사의 평균적인 엔지니어는 2025년 12월 무렵 OpenAI 제품 사용량의 대부분을 Codex로 옮겼습니다. 오늘날 평균적인 엔지니어는 출력 토큰의 99%를 ChatGPT가 아닌 Codex로 만들어 냅니다. 법무·재무·채용 부서는 이보다 늦은 2026년 4월 무렵에야 Codex를 주로 쓰는 단계로 넘어갔지만, 그 전환 속도는 훨씬 빨랐습니다. 이제 OpenAI의 평균적인 변호사나 채용 담당자는 출력 토큰의 85% 이상을 Codex로 만들어 냅니다.</p>
+
+      <p>지난 6개월 동안 회사 안에서 Codex 사용은 더 깊고 강해졌습니다. 활성 내부 사용자들 사이에서 출력 토큰 총량의 변화는 모든 부서에서 가파르게 늘었습니다. 가장 큰 폭으로 뛴 곳은 리서치 부서로, 2026년 6월 기준 사용량 중앙값이 2025년 11월보다 56배 높았습니다. 고객 지원 부서는 32배, 엔지니어링은 27배 늘었고, 법무는 비교적 완만하게 늘었지만 그래도 11월 대비 13배에 이르렀습니다.</p>
+
+      <p>이 두 가지 흐름은 Codex가 OpenAI의 생산적 업무 방식을 어떻게 바꿔 놓았는지를 함께 보여 줍니다. 회사 전반에서 사람들은 주된 AI 활용 방식을 챗봇에서 에이전트로 바꾸고 있으며, 기하급수적으로 늘어나는 양의 에이전트 노동을 쏟아붓고 있습니다.</p>
+
+      <h2>가장 빠르게 늘어나는 사용자층은 비개발자입니다</h2>
+
+      <p>OpenAI·조직·개인 등 모든 사용자층에서 Codex 사용은 개발자로부터 시작됐습니다. 코딩 도구로 출발한 만큼 개발자가 자연스러운 첫 사용층이었기 때문입니다. 그러나 Codex가 더 일반적인 지식 노동으로 영역을 넓히면서, 비개발자의 도입 속도가 오히려 더 빨라졌습니다. 아래 사용자 증가 그래프에서 보듯, 개인·조직·OpenAI 모든 집단에서 주간 비개발자 사용자가 개발자보다 더 빠르게 늘었습니다. 2026년 6월 초 기준 비개발자 개인 사용자는 2025년 8월 이후 137배로 늘었습니다. 비개발자 조직 사용자는 189배 늘었고, 비개발자 OpenAI 사용자는 12배 늘었는데, 이는 이 집단이 이미 평균을 크게 웃도는 지점에서 출발했기 때문으로 보입니다.</p>
+
+      <p>이런 변화가 모든 비개발자가 엔지니어와 똑같은 방식으로 Codex를 쓴다는 뜻은 아닙니다. 오히려 더 많은 비개발자가 저마다의 방식으로, 어떤 형태로든 에이전트 작업에 Codex를 쓰고 있다는 뜻입니다.</p>
+
+      <h2>Codex는 ‘할 수 있는 일’의 범위를 넓히고 있습니다</h2>
+
+      <p>Codex는 그동안 기술 전문성이 병목이었던 업무 흐름을, 비기술 부서가 한층 빠르게 처리할 수 있게 해 줍니다. 아래 히트맵<sup class="fnref" id="ref-11"><a href="#note-11" aria-label="주 11 보기">11</a></sup>은 OpenAI 내부에서 추정한 직군과, Codex 결과물에 나타난 작업 유형을 견주어 보여 줍니다. 데이터 과학·리서치에서는 엔지니어링·코딩이 가장 큰 비중을 차지하는 반면, 재무·사업 운영, 마케팅, 운영을 비롯한 다른 부서에서는 지식 노동이 가장 큰 비중을 차지합니다.</p>
+
+      <p>다만 에이전트 도구는 한 사람이 해낼 수 있는 일의 범위를 넓혀 줍니다. 예컨대 사업 부문 종사자가 Codex로 한 작업 가운데 4분의 1 이상이 엔지니어링이나 코딩이었습니다. 에이전트는 서로 다른 업무 영역을 넘나드는 데 드는 비용을 낮춰 주고, 예전 같으면 더 전문적인 기술 지원이 필요했던 인접 업무까지 직접 해낼 수 있게 돕습니다.</p>
+
+      <div class="table-wrap">
+        <p class="table-title">직군 vs. Codex로 수행한 작업</p>
+        <table class="heat">
+          <thead>
+            <tr>
+              <th>통합 추정 부서</th>
+              <th class="grp" colspan="5">작업 범주</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>엔지니어링·코딩</th>
+              <th>데이터 분석</th>
+              <th>재무 분석</th>
+              <th>지식 노동</th>
+              <th>기타</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>엔지니어링</th>
+              <td style="background:rgba(var(--accent-rgb),.36)">72%</td>
+              <td style="background:rgba(var(--accent-rgb),.02)">4%</td>
+              <td style="background:rgba(var(--accent-rgb),.01)">1%</td>
+              <td style="background:rgba(var(--accent-rgb),.09)">18%</td>
+              <td style="background:rgba(var(--accent-rgb),.03)">5%</td>
+            </tr>
+            <tr>
+              <th>데이터 과학·리서치</th>
+              <td style="background:rgba(var(--accent-rgb),.26)">51%</td>
+              <td style="background:rgba(var(--accent-rgb),.05)">10%</td>
+              <td style="background:rgba(var(--accent-rgb),0)">0%</td>
+              <td style="background:rgba(var(--accent-rgb),.15)">30%</td>
+              <td style="background:rgba(var(--accent-rgb),.045)">9%</td>
+            </tr>
+            <tr>
+              <th>재무·사업 운영</th>
+              <td style="background:rgba(var(--accent-rgb),.155)">31%</td>
+              <td style="background:rgba(var(--accent-rgb),.045)">9%</td>
+              <td style="background:rgba(var(--accent-rgb),.08)">16%</td>
+              <td style="background:rgba(var(--accent-rgb),.17)">34%</td>
+              <td style="background:rgba(var(--accent-rgb),.05)">10%</td>
+            </tr>
+            <tr>
+              <th>제품·마케팅·운영</th>
+              <td style="background:rgba(var(--accent-rgb),.125)">25%</td>
+              <td style="background:rgba(var(--accent-rgb),.015)">3%</td>
+              <td style="background:rgba(var(--accent-rgb),.035)">7%</td>
+              <td style="background:rgba(var(--accent-rgb),.26)">51%</td>
+              <td style="background:rgba(var(--accent-rgb),.075)">15%</td>
+            </tr>
+            <tr>
+              <th>기타</th>
+              <td style="background:rgba(var(--accent-rgb),.25)">50%</td>
+              <td style="background:rgba(var(--accent-rgb),.035)">7%</td>
+              <td style="background:rgba(var(--accent-rgb),.01)">2%</td>
+              <td style="background:rgba(var(--accent-rgb),.19)">38%</td>
+              <td style="background:rgba(var(--accent-rgb),.02)">4%</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="table-cap">부서 내 출력 토큰 비중 (색이 짙을수록 비중이 큼)</p>
+      </div>
+
+      <h2>이것이 에이전트의 경제적 잠재력에 갖는 의미</h2>
+
+      <p>엔지니어가 아닌 직원들이 에이전트 도구를 더 많이 쓰게 되면서, 이들이 해낼 수 있는 일의 범위가 넓어지고 있습니다. 이는 업무 흐름을 어떻게 다시 설계할지 고민하는 기업, 어떤 역량이 더 가치 있어질지 가늠하는 직원, 그리고 AI가 노동 시장을 어떻게 바꾸는지 이해하려는 정책 입안자와 연구자 모두에게 중요한 문제입니다.</p>
+
+      <p>이번 논문은 최첨단(프런티어) 사용자<sup class="fnref" id="ref-12"><a href="#note-12" aria-label="주 12 보기">12</a></sup>들이 성능 좋은 에이전트 도구를 어떻게 받아들이는지를 보여 줍니다. 우리의 분석 결과는, 사람들이 성능 좋은 에이전트 도구에 마찰 없이 폭넓게 접근할 수 있을 때 어떤 일이 벌어지는지를 잘 드러냅니다. 즉 도구가 좋아질수록 사람들은 그것을 더 길고, 더 복잡하며, 더 여러 부서에 걸친 일에 사용합니다. 시간이 흐를수록 이런 모습이 곧 ‘일의 미래’가 될 가능성이 큽니다.</p>
+
+    </article>
+
+    <!-- ===== NOTES ===== -->
+    <section class="notes-sec" aria-label="주석 및 용어 풀이">
+      <h2>주(註) · 용어 풀이</h2>
+      <ol class="notes">
+
+        <li class="note" id="note-1">
+          <span class="note-num">1</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">에이전트형 AI (Agentic AI)</span> — 사람의 지시를 받아 스스로 여러 단계를 거쳐 목표를 이루는 AI. 한 번 묻고 답하는 챗봇과 달리, 도구를 사용하고 환경과 주고받으며 수 분에서 수 시간 동안 독립적으로 일을 수행합니다.<a class="note-back" href="#ref-1" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-2">
+          <span class="note-num">2</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">지식 노동 (Knowledge work)</span> — 지식과 정보를 다루어 가치를 만들어 내는 일(분석, 기획, 문서 작성, 코딩 등). 여기서는 ‘AI가 대신 처리할 수 있는 일의 기본 단위’라는 뜻으로 쓰였습니다.<a class="note-back" href="#ref-2" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-3">
+          <span class="note-num">3</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">도구 호출 (Tool call)</span> — AI 에이전트가 외부 프로그램이나 기능(웹 검색, 코드 실행, 파일 처리 등)을 직접 불러내 사용하는 것을 말합니다.<a class="note-back" href="#ref-3" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-4">
+          <span class="note-num">4</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">Codex</span> — OpenAI가 만든 AI 코딩 에이전트. 사용자의 지시를 받아 코드 작성·수정, 작업 자동화 등을 비교적 긴 시간 동안 스스로 수행합니다. 본래 개발자용 도구로 출발했습니다.<a class="note-back" href="#ref-4" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-5">
+          <span class="note-num">5</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">토큰 (Token) · 출력 토큰</span> — 토큰은 AI 모델이 글을 처리할 때 다루는 기본 단위(대략 단어 또는 단어 조각)입니다. 이 글에서는 ‘사용량을 재는 척도’로 쓰였습니다. ‘출력 토큰’은 모델이 만들어 낸(출력한) 토큰을 가리킵니다.<a class="note-back" href="#ref-5" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-6">
+          <span class="note-num">6</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">긴 호흡의 작업 (Long-horizon)</span> — 한두 번의 주고받기로 끝나지 않고, 여러 단계를 거치며 오랜 시간에 걸쳐 진행되는 작업. 본문 뒤에 나오는 ‘긴 맥락(long-context)’은 그만큼 많은 정보를 한꺼번에 다뤄야 한다는 뜻입니다.<a class="note-back" href="#ref-6" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-7">
+          <span class="note-num">7</span>
+          <div class="note-body"><span class="note-tag src">원문 각주</span>작업의 호흡(사람이 하면 걸릴 시간)은 Codex의 작업 기록을 살펴본 ‘LLM 평가자(LLM-as-judge)’ 방식으로 추정했습니다. 이는 사람 대신 다른 AI 언어모델에게 결과물을 평가·판정하게 하는 방법입니다.<a class="note-back" href="#ref-7" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-8">
+          <span class="note-num">8</span>
+          <div class="note-body"><span class="note-tag src">원문 각주</span>이 기준선들은 모델이 추정한 값이므로 정확한 수치가 아니라 대략적인 방향으로 받아들여야 합니다. 또한 개인 사용자 데이터에만 기반하며, 전체 사용자 중 무작위로 추출한 0.1% 표본의 요청을 바탕으로 했습니다.<a class="note-back" href="#ref-8" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-9">
+          <span class="note-num">9</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">상위 1% (99백분위수)</span> — 전체를 사용량 순으로 100명 줄 세웠을 때 맨 위 한 명에 해당하는, 가장 많이 쓰는 집단을 뜻합니다.<a class="note-back" href="#ref-9" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-10">
+          <span class="note-num">10</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">병렬 · 오케스트레이션</span> — 여러 개의 에이전트를 동시에(병렬로) 돌리고, 그 작업들을 하나의 흐름으로 지휘·조율하는 것을 ‘오케스트레이션’이라고 합니다. 오케스트라 지휘에 빗댄 표현입니다.<a class="note-back" href="#ref-10" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-11">
+          <span class="note-num">11</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">히트맵 (Heat map)</span> — 값의 크고 작음을 색의 짙고 옅음으로 나타내, 한눈에 비교할 수 있게 해 주는 표 형태의 그래프입니다.<a class="note-back" href="#ref-11" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+        <li class="note" id="note-12">
+          <span class="note-num">12</span>
+          <div class="note-body"><span class="note-tag">용어 풀이</span><span class="note-term">프런티어 · 최첨단 (Frontier)</span> — 기술이 도달한 가장 앞선 경계를 뜻합니다. ‘프런티어 사용자’는 그 최첨단 도구를 가장 먼저, 가장 적극적으로 쓰는 사람들을 가리킵니다.<a class="note-back" href="#ref-12" aria-label="본문으로 돌아가기">↩</a></div>
+        </li>
+
+      </ol>
+    </section>
+
+    <footer>
+      원문: OpenAI, “How agents are transforming work” (2026년 6월 25일). ·
+      <a href="https://openai.com/index/how-agents-are-transforming-work/" target="_blank" rel="noopener">openai.com</a><br>
+      이 문서는 위 글의 비공식 한국어 번역이며, 모든 권리는 원저작자(OpenAI)에게 있습니다. 본문 속 수치와 표는 원문을 그대로 옮긴 것입니다.
+    </footer>
+
+  </div>
+</div>
+</body>
+</html>
