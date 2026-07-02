@@ -1,3 +1,6 @@
 exclude:
+  - 260702/assets
+  - 260702/corca-ax-consulting-report.html
+  - 260702/corca-ax-briefing.html
   - 260702/corca-ax-consulting-report.pdf
   - 260702/corca-ax-briefing.pdf
