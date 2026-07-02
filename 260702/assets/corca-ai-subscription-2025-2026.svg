@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="878" viewBox="0 0 2048 878" role="img" aria-label="2025.11과 2026.06 코르카 사내 AI 구독 현황 비교">
+  <defs>
+    <style>
+      text { font-family: Pretendard, Arial, sans-serif; fill: #101010; }
+      .title { fill: #171717; font-size: 58px; font-weight: 900; letter-spacing: -1px; }
+      .sheet-bg { fill: #ffffff; }
+      .head { fill: #eeeeee; }
+      .grid { stroke: #111111; stroke-width: 2; vector-effect: non-scaling-stroke; }
+      .heavy { stroke: #111111; stroke-width: 4; vector-effect: non-scaling-stroke; }
+      .label { font-size: 20px; font-weight: 800; }
+      .team { font-size: 18px; font-weight: 600; }
+      .cell { font-size: 18px; font-weight: 700; }
+      .green { fill: #cef4cc; }
+      .yellow { fill: #fff3ae; }
+      .arrow { fill: #777777; }
+    </style>
+  </defs>
+
+  <rect width="2048" height="878" fill="#ffffff"/>
+  <text class="title" x="1024" y="52" text-anchor="middle">2025.11 &lt;&gt; 2026.06 코르카 사내 AI 구독 현황</text>
+
+  <g transform="translate(0 96)">
+    <rect class="sheet-bg" x="0" y="0" width="856" height="734"/>
+    <rect class="head" x="0" y="0" width="856" height="52"/>
+    <rect class="head" x="0" y="0" width="122" height="52"/>
+    <text class="label" x="61" y="33" text-anchor="middle">팀</text>
+    <text class="label" x="183" y="33" text-anchor="middle">GPT Plus</text>
+    <text class="label" x="305" y="33" text-anchor="middle">GPT Pro</text>
+    <text class="label" x="427" y="33" text-anchor="middle">Cursor Pro</text>
+    <text class="label" x="549" y="33" text-anchor="middle">Claude Pro</text>
+    <text class="label" x="671" y="33" text-anchor="middle">Claude Max 5x</text>
+    <text class="label" x="793" y="33" text-anchor="middle">Claude Max 20x</text>
+
+    <rect class="green" x="124" y="54" width="120" height="38"/>
+    <rect class="green" x="368" y="54" width="120" height="38"/>
+    <rect class="yellow" x="124" y="94" width="120" height="38"/>
+    <rect class="yellow" x="368" y="94" width="120" height="38"/>
+    <rect class="green" x="612" y="94" width="120" height="38"/>
+    <rect class="green" x="124" y="134" width="120" height="38"/>
+    <rect class="green" x="368" y="134" width="120" height="38"/>
+    <rect class="green" x="124" y="174" width="120" height="38"/>
+    <rect class="green" x="734" y="174" width="120" height="38"/>
+    <rect class="green" x="246" y="214" width="120" height="38"/>
+    <rect class="yellow" x="124" y="254" width="120" height="38"/>
+    <rect class="green" x="612" y="254" width="120" height="38"/>
+    <rect class="green" x="124" y="294" width="120" height="38"/>
+    <rect class="yellow" x="368" y="294" width="120" height="38"/>
+    <rect class="green" x="490" y="294" width="120" height="38"/>
+    <rect class="green" x="124" y="414" width="120" height="38"/>
+    <rect class="green" x="124" y="454" width="120" height="38"/>
+    <rect class="green" x="612" y="454" width="120" height="38"/>
+    <rect class="yellow" x="124" y="494" width="120" height="38"/>
+    <rect class="green" x="612" y="494" width="120" height="38"/>
+    <rect class="green" x="124" y="534" width="120" height="38"/>
+    <rect class="green" x="612" y="574" width="120" height="38"/>
+    <rect class="green" x="124" y="614" width="120" height="38"/>
+
+    <path class="grid" fill="none" d="M0 0H856 M0 52H856 M0 92H856 M0 132H856 M0 172H856 M0 212H856 M0 252H856 M0 292H856 M0 332H856 M0 372H856 M0 412H856 M0 452H856 M0 492H856 M0 532H856 M0 572H856 M0 612H856 M0 652H856 M0 692H856 M0 734H856 M0 0V734 M122 0V734 M244 0V734 M366 0V734 M488 0V734 M610 0V734 M732 0V734 M856 0V734"/>
+    <path class="heavy" fill="none" d="M0 0H856 M0 734H856 M0 0V734 M856 0V734"/>
+
+    <g>
+      <text class="team" x="6" y="79">Tech</text><text class="cell" x="128" y="79">높음</text><text class="cell" x="372" y="79">높음</text>
+      <text class="team" x="6" y="119">Tech</text><text class="cell" x="128" y="119">보통</text><text class="cell" x="372" y="119">보통</text><text class="cell" x="616" y="119">높음</text>
+      <text class="team" x="6" y="159">Tech</text><text class="cell" x="128" y="159">높음</text><text class="cell" x="372" y="159">높음</text>
+      <text class="team" x="6" y="199">Tech</text><text class="cell" x="128" y="199">높음</text><text class="cell" x="738" y="199">높음</text>
+      <text class="team" x="6" y="239">Tech</text><text class="cell" x="250" y="239">높음</text>
+      <text class="team" x="6" y="279">Tech</text><text class="cell" x="128" y="279">보통</text><text class="cell" x="616" y="279">높음</text>
+      <text class="team" x="6" y="319">Tech</text><text class="cell" x="128" y="319">높음</text><text class="cell" x="372" y="319">보통</text><text class="cell" x="494" y="319">높음</text>
+      <text class="team" x="6" y="359">Tech</text>
+      <text class="team" x="6" y="399">Product</text>
+      <text class="team" x="6" y="439">Product</text><text class="cell" x="128" y="439">높음</text>
+      <text class="team" x="6" y="479">Product</text><text class="cell" x="128" y="479">높음</text><text class="cell" x="616" y="479">높음</text>
+      <text class="team" x="6" y="519">Product</text><text class="cell" x="128" y="519">보통</text><text class="cell" x="616" y="519">높음</text>
+      <text class="team" x="6" y="559">Product</text><text class="cell" x="128" y="559">높음</text>
+      <text class="team" x="6" y="599">Product</text><text class="cell" x="616" y="599">높음</text>
+      <text class="team" x="6" y="639">Operation</text><text class="cell" x="128" y="639">높음</text>
+      <text class="team" x="6" y="679">Operation</text>
+      <text class="team" x="6" y="719">Operation</text>
+    </g>
+
+    <g opacity="0.9">
+      <path class="arrow" d="M229 72l8 0l-4 5z"/><path class="arrow" d="M351 72l8 0l-4 5z"/><path class="arrow" d="M473 72l8 0l-4 5z"/><path class="arrow" d="M595 72l8 0l-4 5z"/><path class="arrow" d="M717 72l8 0l-4 5z"/><path class="arrow" d="M839 72l8 0l-4 5z"/>
+      <path class="arrow" d="M229 112l8 0l-4 5z"/><path class="arrow" d="M351 112l8 0l-4 5z"/><path class="arrow" d="M473 112l8 0l-4 5z"/><path class="arrow" d="M595 112l8 0l-4 5z"/><path class="arrow" d="M717 112l8 0l-4 5z"/><path class="arrow" d="M839 112l8 0l-4 5z"/>
+      <path class="arrow" d="M229 192l8 0l-4 5z"/><path class="arrow" d="M351 232l8 0l-4 5z"/><path class="arrow" d="M473 312l8 0l-4 5z"/><path class="arrow" d="M717 512l8 0l-4 5z"/>
+    </g>
+  </g>
+
+  <g transform="translate(894 96)">
+    <rect class="sheet-bg" x="0" y="0" width="1154" height="734"/>
+    <rect class="head" x="0" y="0" width="1154" height="52"/>
+    <rect class="head" x="0" y="0" width="164" height="52"/>
+    <text class="label" x="82" y="33" text-anchor="middle">팀</text>
+    <text class="label" x="246" y="33" text-anchor="middle">GPT Plus</text>
+    <text class="label" x="410" y="33" text-anchor="middle">GPT Pro</text>
+    <text class="label" x="574" y="33" text-anchor="middle">Cursor Pro</text>
+    <text class="label" x="738" y="33" text-anchor="middle">Claude Pro</text>
+    <text class="label" x="902" y="33" text-anchor="middle">Claude Max 5x</text>
+    <text class="label" x="1072" y="33" text-anchor="middle">Claude Max 20x</text>
+
+    <rect class="green" x="328" y="54" width="162" height="38"/>
+    <rect class="green" x="986" y="54" width="166" height="38"/>
+    <rect class="green" x="166" y="94" width="162" height="38"/>
+    <rect class="green" x="986" y="94" width="166" height="38"/>
+    <rect class="green" x="986" y="134" width="166" height="38"/>
+    <rect class="yellow" x="166" y="174" width="162" height="38"/>
+    <rect class="green" x="986" y="174" width="166" height="38"/>
+    <rect class="green" x="328" y="214" width="162" height="38"/>
+    <rect class="green" x="986" y="214" width="166" height="38"/>
+    <rect class="green" x="328" y="254" width="162" height="38"/>
+    <rect class="green" x="328" y="294" width="162" height="38"/>
+    <rect class="green" x="328" y="334" width="162" height="38"/>
+    <rect class="green" x="986" y="334" width="166" height="38"/>
+    <rect class="green" x="328" y="374" width="162" height="38"/>
+    <rect class="green" x="822" y="374" width="164" height="38"/>
+    <rect class="green" x="166" y="414" width="162" height="38"/>
+    <rect class="green" x="822" y="414" width="164" height="38"/>
+    <rect class="yellow" x="166" y="454" width="162" height="38"/>
+    <rect class="green" x="822" y="454" width="164" height="38"/>
+    <rect class="green" x="166" y="494" width="162" height="38"/>
+    <rect class="green" x="822" y="494" width="164" height="38"/>
+    <rect class="green" x="166" y="534" width="162" height="38"/>
+    <rect class="green" x="986" y="534" width="166" height="38"/>
+    <rect class="green" x="166" y="574" width="162" height="38"/>
+    <rect class="green" x="822" y="574" width="164" height="38"/>
+    <rect class="green" x="328" y="614" width="162" height="38"/>
+    <rect class="green" x="822" y="614" width="164" height="38"/>
+    <rect class="green" x="166" y="654" width="162" height="38"/>
+    <rect class="green" x="656" y="694" width="164" height="38"/>
+
+    <path class="grid" fill="none" d="M0 0H1154 M0 52H1154 M0 92H1154 M0 132H1154 M0 172H1154 M0 212H1154 M0 252H1154 M0 292H1154 M0 332H1154 M0 372H1154 M0 412H1154 M0 452H1154 M0 492H1154 M0 532H1154 M0 572H1154 M0 612H1154 M0 652H1154 M0 692H1154 M0 734H1154 M0 0V734 M164 0V734 M328 0V734 M492 0V734 M656 0V734 M820 0V734 M986 0V734 M1154 0V734"/>
+    <path class="heavy" fill="none" d="M0 0H1154 M0 734H1154 M0 0V734 M1154 0V734"/>
+
+    <g>
+      <text class="team" x="8" y="79">Tech</text><text class="cell" x="332" y="79">높음</text><text class="cell" x="990" y="79">높음</text>
+      <text class="team" x="8" y="119">Tech</text><text class="cell" x="170" y="119">높음</text><text class="cell" x="990" y="119">높음</text>
+      <text class="team" x="8" y="159">Tech</text><text class="cell" x="990" y="159">높음</text>
+      <text class="team" x="8" y="199">Tech</text><text class="cell" x="170" y="199">보통</text><text class="cell" x="990" y="199">높음</text>
+      <text class="team" x="8" y="239">Tech</text><text class="cell" x="332" y="239">높음</text><text class="cell" x="990" y="239">높음</text>
+      <text class="team" x="8" y="279">Tech</text><text class="cell" x="332" y="279">높음</text>
+      <text class="team" x="8" y="319">Tech</text><text class="cell" x="332" y="319">높음</text>
+      <text class="team" x="8" y="359">Tech</text><text class="cell" x="332" y="359">높음</text><text class="cell" x="990" y="359">높음</text>
+      <text class="team" x="8" y="399">Tech</text><text class="cell" x="332" y="399">높음</text><text class="cell" x="826" y="399">높음</text>
+      <text class="team" x="8" y="439">Product</text><text class="cell" x="170" y="439">높음</text><text class="cell" x="826" y="439">높음</text>
+      <text class="team" x="8" y="479">Product</text><text class="cell" x="170" y="479">보통</text><text class="cell" x="826" y="479">높음</text>
+      <text class="team" x="8" y="519">Product</text><text class="cell" x="170" y="519">높음</text><text class="cell" x="826" y="519">높음</text>
+      <text class="team" x="8" y="559">Product</text><text class="cell" x="170" y="559">높음</text><text class="cell" x="990" y="559">높음</text>
+      <text class="team" x="8" y="599">Product</text><text class="cell" x="170" y="599">높음</text><text class="cell" x="826" y="599">높음</text>
+      <text class="team" x="8" y="639">Product</text><text class="cell" x="332" y="639">높음</text><text class="cell" x="826" y="639">높음</text>
+      <text class="team" x="8" y="679">Operation</text><text class="cell" x="170" y="679">높음</text><text class="cell" x="660" y="679">입력 필요</text>
+      <text class="team" x="8" y="719">Operation</text><text class="cell" x="656" y="719">높음</text>
+    </g>
+
+    <g opacity="0.9">
+      <path class="arrow" d="M312 72l10 0l-5 6z"/><path class="arrow" d="M476 72l10 0l-5 6z"/><path class="arrow" d="M640 72l10 0l-5 6z"/><path class="arrow" d="M804 72l10 0l-5 6z"/><path class="arrow" d="M970 72l10 0l-5 6z"/><path class="arrow" d="M1138 72l10 0l-5 6z"/>
+      <path class="arrow" d="M312 112l10 0l-5 6z"/><path class="arrow" d="M476 232l10 0l-5 6z"/><path class="arrow" d="M970 432l10 0l-5 6z"/><path class="arrow" d="M1138 552l10 0l-5 6z"/>
+    </g>
+  </g>
+</svg>

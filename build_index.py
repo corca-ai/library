@@ -23,13 +23,26 @@ folders = sorted((d for d in os.listdir(ROOT)
                  reverse=True)
 cards, total = [], 0
 for d in folders:
-    files = sorted(f for f in os.listdir(os.path.join(ROOT, d)) if f.lower().endswith('.html'))
-    if not files: continue
+    day_root = os.path.join(ROOT, d)
+    clean_dirs = sorted(
+        f for f in os.listdir(day_root)
+        if os.path.isfile(os.path.join(day_root, f, "index.html"))
+    )
+    clean_basenames = set(clean_dirs)
+    files = sorted(
+        f for f in os.listdir(day_root)
+        if f.lower().endswith('.html') and os.path.splitext(f)[0] not in clean_basenames
+    )
+    if not files and not clean_dirs: continue
     lis = []
     for f in files:
         total += 1
         href = quote(f"{d}/{f}")
         lis.append(f'<li><a href="{href}">{html.escape(title_of(os.path.join(ROOT, d, f)))}</a></li>')
+    for f in clean_dirs:
+        total += 1
+        href = quote(f"{d}/{f}/")
+        lis.append(f'<li><a href="{href}">{html.escape(title_of(os.path.join(ROOT, d, f, "index.html")))}</a></li>')
     cards.append(f'<section class="day"><div class="date">{fmt_date(d)}</div><ul>{"".join(lis)}</ul></section>')
 
 body = "\n".join(cards) if cards else '<p class="empty">아직 올라온 번역이 없습니다.</p>'

@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>코르카 AX 보고서 제작 회고 — 5분 브리핑</title>
+    <style>
+      @font-face {
+        font-family: "Pretendard Variable";
+        src: url("./assets/PretendardVariable.woff2") format("woff2-variations");
+        font-weight: 45 920;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Arita Buri KR Local";
+        src: url("./assets/AritaBuriKR-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Arita Buri KR Local";
+        src: url("./assets/AritaBuriKR-SemiBold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Arita Buri KR Local";
+        src: url("./assets/AritaBuriKR-Bold.ttf") format("truetype");
+        font-weight: 900;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      :root {
+        --ink: #101217;
+        --ink-2: #1f252f;
+        --muted: #5d6470;
+        --line: #d9dde5;
+        --line-strong: #aab2bf;
+        --paper: #ffffff;
+        --soft: #f6f8fb;
+        --navy: #041126;
+        --blue: #005cff;
+        --blue-soft: #eaf2ff;
+        --ice: #89e7ff;
+        --serif: "Arita Buri KR Local", "Nanum Myeongjo", serif;
+        --sans: "Pretendard Variable", "Apple SD Gothic Neo", system-ui, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      @page {
+        size: 1280px 720px;
+        margin: 0;
+      }
+
+      html {
+        background: #dfe4eb;
+        color: var(--ink);
+        font-family: var(--sans);
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        margin: 0;
+        counter-reset: folio 0;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+      }
+
+      .slide {
+        position: relative;
+        width: 1280px;
+        height: 720px;
+        margin: 20px auto;
+        overflow: hidden;
+        background: var(--paper);
+        box-shadow: 0 16px 36px rgba(17, 24, 39, 0.14);
+        counter-increment: folio;
+        page-break-after: always;
+        break-after: page;
+      }
+
+      @media print {
+        html {
+          background: none;
+        }
+        .slide {
+          margin: 0;
+          box-shadow: none;
+        }
+      }
+
+      h1, h2, h3, p, ul, ol, li {
+        margin-top: 0;
+      }
+
+      /* ---------- cover ---------- */
+
+      .cover {
+        display: flex;
+        color: #fff;
+        background: var(--navy);
+      }
+
+      .cover-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 700px;
+        padding: 60px 64px 52px;
+      }
+
+      .cover-right {
+        position: relative;
+        flex: 1;
+      }
+
+      .cover-right img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 62% center;
+      }
+
+      .cover-right::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background: linear-gradient(90deg, #041126, rgba(4, 17, 38, 0.28) 34%, rgba(4, 17, 38, 0) 62%);
+      }
+
+      .cover .logo-white {
+        width: 128px;
+        height: auto;
+      }
+
+      .cover .eyebrow {
+        color: var(--ice);
+      }
+
+      .cover h1 {
+        margin: 18px 0 26px;
+        font-family: var(--serif);
+        font-size: 55px;
+        font-weight: 900;
+        line-height: 1.22;
+      }
+
+      .cover .subtitle {
+        max-width: 500px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 19px;
+        font-weight: 540;
+        line-height: 1.58;
+      }
+
+      .cover-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        width: 480px;
+        font-size: 12.5px;
+        line-height: 1.7;
+      }
+
+      .cover-meta strong {
+        display: block;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 840;
+      }
+
+      .cover-meta span {
+        color: rgba(255, 255, 255, 0.66);
+      }
+
+      /* ---------- shared content chrome ---------- */
+
+      .pad {
+        display: flex;
+        flex-direction: column;
+        height: 720px;
+        padding: 52px 72px 58px;
+      }
+
+      .slide-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .slide-header .logo-blue {
+        width: 92px;
+        height: auto;
+        margin-top: 4px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--blue);
+        font-size: 14px;
+        font-weight: 850;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin-bottom: 30px;
+        font-family: var(--serif);
+        font-size: 40px;
+        font-weight: 900;
+        line-height: 1.28;
+      }
+
+      .lead {
+        max-width: 820px;
+        color: #252a33;
+        font-size: 18.5px;
+        font-weight: 540;
+        line-height: 1.62;
+      }
+
+      .lead b,
+      .body b {
+        color: var(--ink);
+        font-weight: 780;
+      }
+
+      .footer {
+        position: absolute;
+        right: 72px;
+        bottom: 26px;
+        left: 72px;
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .footer .folio::after {
+        content: counter(folio);
+      }
+
+      .dark .footer {
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .grow {
+        flex: 1;
+      }
+
+      /* ---------- slide 2 : conclusion ---------- */
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 36px;
+        margin-top: 46px;
+      }
+
+      .stat {
+        padding-top: 22px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .stat b {
+        display: block;
+        margin-bottom: 14px;
+        color: var(--blue);
+        font-family: var(--serif);
+        font-size: 44px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .stat span {
+        display: block;
+        max-width: 300px;
+        color: #303642;
+        font-size: 15.5px;
+        line-height: 1.5;
+      }
+
+      /* ---------- two-column layouts ---------- */
+
+      .cols {
+        display: grid;
+        grid-template-columns: 460px 1fr;
+        gap: 64px;
+        align-items: start;
+      }
+
+      .body {
+        color: #252a33;
+        font-size: 17px;
+        font-weight: 520;
+        line-height: 1.66;
+      }
+
+      .body p + p {
+        margin-top: 14px;
+      }
+
+      /* numbered rows (slide 3) */
+
+      .step-rows {
+        display: grid;
+        gap: 0;
+      }
+
+      .step-row {
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        gap: 18px;
+        align-items: baseline;
+        padding: 15px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .step-row:first-child {
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .step-row .num {
+        color: var(--blue);
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .step-row p {
+        margin: 0;
+        color: var(--ink-2);
+        font-size: 16.5px;
+        font-weight: 560;
+        line-height: 1.45;
+      }
+
+      .step-row p small {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 13.5px;
+        font-weight: 480;
+      }
+
+      .col-label {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 13.5px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      /* ---------- slide 4 : wrong vs right ---------- */
+
+      .vs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        align-items: stretch;
+      }
+
+      .vs-card {
+        display: flex;
+        flex-direction: column;
+        padding: 34px 36px 30px;
+        background: var(--soft);
+      }
+
+      .vs-card.right {
+        background: var(--blue-soft);
+      }
+
+      .vs-card h3 {
+        margin: 0 0 6px;
+        font-family: var(--serif);
+        font-size: 23px;
+        font-weight: 900;
+        color: var(--ink);
+      }
+
+      .vs-card.right h3 {
+        color: var(--blue);
+      }
+
+      .vs-card .tag {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 13.5px;
+        font-weight: 700;
+      }
+
+      .vs-card ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 11px;
+      }
+
+      .vs-card li {
+        position: relative;
+        padding-left: 18px;
+        color: #2b313c;
+        font-size: 15.8px;
+        line-height: 1.5;
+      }
+
+      .vs-card li::before {
+        position: absolute;
+        top: 0.62em;
+        left: 2px;
+        width: 6px;
+        height: 6px;
+        content: "";
+        border-radius: 50%;
+        background: var(--line-strong);
+      }
+
+      .vs-card.right li::before {
+        background: var(--blue);
+      }
+
+      .vs-card .verdict {
+        margin: 22px 0 0;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        font-size: 16px;
+        font-weight: 740;
+        color: var(--ink);
+        line-height: 1.5;
+      }
+
+      /* ---------- slide 5 : message structure ---------- */
+
+      .flow-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 26px 34px;
+      }
+
+      .flow {
+        min-height: 118px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .flow b {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-family: var(--serif);
+        font-size: 18.5px;
+        font-weight: 900;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+
+      .flow b i {
+        font-style: normal;
+        color: var(--blue);
+        font-size: 15px;
+      }
+
+      .flow span {
+        display: block;
+        color: var(--muted);
+        font-size: 14.5px;
+        line-height: 1.5;
+      }
+
+      .principle {
+        margin-top: 34px;
+        padding: 24px 32px;
+        background: var(--navy);
+        color: #fff;
+      }
+
+      .principle p {
+        margin: 0;
+        font-family: var(--serif);
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+
+      .principle p small {
+        display: block;
+        margin-top: 6px;
+        font-family: var(--sans);
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      /* ---------- slide 6 : working method ---------- */
+
+      .chips {
+        display: grid;
+        gap: 12px;
+      }
+
+      .chip {
+        padding: 13px 20px;
+        background: var(--soft);
+        color: var(--ink-2);
+        font-size: 15.5px;
+        font-weight: 580;
+        line-height: 1.45;
+      }
+
+      .chip::before {
+        content: "“";
+        color: var(--blue);
+        font-family: var(--serif);
+        font-weight: 900;
+        margin-right: 2px;
+      }
+
+      .chip::after {
+        content: "”";
+        color: var(--blue);
+        font-family: var(--serif);
+        font-weight: 900;
+        margin-left: 2px;
+      }
+
+      /* ---------- slide 7 : workflow loop ---------- */
+
+      .loop-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0;
+        margin-top: 10px;
+      }
+
+      .loop-step {
+        position: relative;
+        padding: 20px 26px 0 0;
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .loop-step::after {
+        position: absolute;
+        top: 44px;
+        right: 16px;
+        content: "→";
+        color: var(--line-strong);
+        font-size: 20px;
+        font-weight: 300;
+      }
+
+      .loop-step:last-child::after {
+        content: none;
+      }
+
+      .loop-back {
+        color: var(--blue);
+        font-weight: 700;
+      }
+
+      .loop-step i {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--blue);
+        font-family: var(--serif);
+        font-style: normal;
+        font-size: 20px;
+        font-weight: 900;
+      }
+
+      .loop-step b {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 17px;
+        font-weight: 780;
+        line-height: 1.35;
+      }
+
+      .loop-step span {
+        display: block;
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.5;
+      }
+
+      .benefit-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        margin-top: 44px;
+      }
+
+      .benefit {
+        padding: 20px 26px;
+        background: var(--soft);
+        font-size: 15.5px;
+        font-weight: 620;
+        color: var(--ink-2);
+        line-height: 1.5;
+      }
+
+      .benefit small {
+        display: block;
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 13.5px;
+        font-weight: 480;
+      }
+
+      /* ---------- slide 8 : lesson (dark) ---------- */
+
+      .dark {
+        background: var(--navy);
+        color: #fff;
+      }
+
+      .dark .eyebrow {
+        color: var(--ice);
+      }
+
+      .dark h2 {
+        color: #fff;
+      }
+
+      .dark .lead {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .role-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        margin-top: 40px;
+      }
+
+      .role {
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.28);
+      }
+
+      .role h3 {
+        margin: 0 0 14px;
+        font-family: var(--serif);
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--ice);
+      }
+
+      .role p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 16.5px;
+        line-height: 1.62;
+      }
+
+      .dark .closing {
+        margin-top: 44px;
+        max-width: 900px;
+        font-family: var(--serif);
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.56;
+        color: #fff;
+      }
+
+      .dark .closing small {
+        display: block;
+        margin-top: 10px;
+        font-family: var(--sans);
+        font-size: 15px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* ---------- slide 9 : presenter guide ---------- */
+
+      .guide-rows {
+        display: grid;
+      }
+
+      .guide-row {
+        display: grid;
+        grid-template-columns: 150px 190px 1fr;
+        gap: 24px;
+        align-items: baseline;
+        padding: 15px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .guide-row:first-child {
+        border-top: 1px solid var(--line-strong);
+      }
+
+      .guide-row .time {
+        color: var(--blue);
+        font-family: var(--serif);
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .guide-row .topic {
+        font-size: 16px;
+        font-weight: 760;
+      }
+
+      .guide-row .msg {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. cover -->
+    <section class="slide cover">
+      <div class="cover-left">
+        <img class="logo-white" src="./assets/corca-logo-white.png" alt="Corca" />
+        <div>
+          <p class="eyebrow">AX Team Briefing</p>
+          <h1>예쁜 문서가 아니라,<br />설득되는 문서를<br />만들기</h1>
+          <p class="subtitle">코르카 AX 가속화 컨설팅 보고서를 Codex와 함께 만든 과정 회고 — 5분 사내 공유</p>
+        </div>
+        <div class="cover-meta">
+          <div>
+            <strong>대상</strong>
+            <span>코르카 전 구성원</span>
+          </div>
+          <div>
+            <strong>기준 산출물</strong>
+            <span>AX 가속화 컨설팅 리포트<br />(HTML · PDF, 2026년 7월)</span>
+          </div>
+        </div>
+      </div>
+      <div class="cover-right">
+        <img src="./assets/orca-cover.png" alt="" />
+      </div>
+    </section>
+
+    <!-- 2. conclusion -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">결론</p>
+          <h2>핵심은 외형이 아니라<br />메시지 구조였습니다</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <p class="lead">
+        이 작업의 목적은 예쁜 문서를 만드는 것이 아니라, 잠재 고객이 <b>“코르카가 AX에 진심인 회사”</b>라는 것을
+        빠르게 이해하게 만드는 것이었습니다. 외형은 메시지를 실어 나르는 그릇일 뿐, 우선순위는 언제나
+        내용·독자·설득 구조·증거였습니다.
+      </p>
+      <div class="grow"></div>
+      <div class="stat-grid">
+        <div class="stat">
+          <b>30초</b>
+          <span>결정권자가 핵심 메시지를 이해해야 하는 목표 시간</span>
+        </div>
+        <div class="stat">
+          <b>80~90개</b>
+          <span>Codex에게 순차적으로 지시한 작은 수정 작업의 수</span>
+        </div>
+        <div class="stat">
+          <b>디자인 툴 0개</b>
+          <span>HTML/CSS를 디자인 원본으로 삼고 PDF로 export</span>
+        </div>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 3. reader -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">독자</p>
+          <h2>이 문서의 독자는<br />바쁜 의사결정자입니다</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <div class="cols">
+        <div class="body">
+          <p>
+            주요 독자는 중소·중견·대기업에서 <b>AX 도입 여부를 결정하고 예산과 조직 변화를 승인하는
+            사람들</b>입니다. 이들은 바쁘고, 비슷한 제안서를 이미 많이 받아봅니다.
+          </p>
+          <p>
+            그래서 1페이지부터 “무엇을 말하려는 문서인지”가 분명해야 하고, 건너뛰며 읽어도
+            메시지가 이어져야 합니다. 문서 전체가 이 읽기 방식을 전제로 설계되었습니다.
+          </p>
+        </div>
+        <div>
+          <p class="col-label">결정권자가 문서를 읽는 방식</p>
+          <div class="step-rows">
+            <div class="step-row"><span class="num">1</span><p>처음 30초, 빠르게 훑어본다</p></div>
+            <div class="step-row"><span class="num">2</span><p>핵심 메시지가 보이면 특정 페이지로 돌아온다</p></div>
+            <div class="step-row"><span class="num">3</span><p>신뢰할 만한 증거가 있으면 다시 정독한다</p></div>
+            <div class="step-row"><span class="num">4</span><p>지나치게 장식적이거나 말이 많은 페이지는 건너뛴다</p></div>
+            <div class="step-row"><span class="num">5</span><p>실행 경험과 돌아올 결과가 보이면 검토를 시작한다</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 4. wrong vs right -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">접근</p>
+          <h2>읽지 않고 꾸미면, AI slop이 됩니다</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <div class="vs-grid">
+        <div class="vs-card">
+          <h3>잘못된 접근</h3>
+          <p class="tag">내용을 이해하지 못한 채 “알아서 예쁘게 만들어줘”</p>
+          <ul>
+            <li>보기만 좋은데 읽히지 않는 문서</li>
+            <li>출처와 맥락 없이 멋있어 보이는 문장</li>
+            <li>실제 해본 것보다 과장된 주장</li>
+            <li>모든 페이지가 비슷한 템플릿의 반복</li>
+          </ul>
+          <div class="verdict">AI slop을 넘어, ‘예쁜 쓰레기’가 됩니다.</div>
+        </div>
+        <div class="vs-card right">
+          <h3>이번 작업의 접근</h3>
+          <p class="tag">디자인은 마지막 — 판단은 사람이, 실행은 AI가</p>
+          <ul>
+            <li>AX 원문과 코르카 내부 맥락을 먼저 읽는다</li>
+            <li>누구를 설득해야 하는지 독자를 정의한다</li>
+            <li>30초 안에 보여야 할 메시지 구조를 잡는다</li>
+            <li>주장할 수 있는 것과 증거를 가려낸다</li>
+          </ul>
+          <div class="verdict">원문 이해 → 독자 정의 → 메시지 구조 → 증거 → 디자인</div>
+        </div>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 5. message structure -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">설득 구조</p>
+          <h2>보고서는 이 순서로 설득합니다</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <div class="flow-grid">
+        <div class="flow">
+          <b><i>01</i>왜 AX를 제대로 해야 하는가</b>
+          <span>AI 교육과 솔루션 도입만으로는 일하는 방식이 바뀌지 않는다</span>
+        </div>
+        <div class="flow">
+          <b><i>02</i>코르카는 실제로 해왔다</b>
+          <span>교육·코칭·확산을 고객의 실제 업무 문제에서 실행</span>
+        </div>
+        <div class="flow">
+          <b><i>03</i>증거와 레퍼런스가 있다</b>
+          <span>교육·컨설팅 사례와 외부 컨퍼런스 발표 기록</span>
+        </div>
+        <div class="flow">
+          <b><i>04</i>내부에서도 검증했다</b>
+          <span>AX Day · AX 공유회 · Ceal로 스스로 실험하고 반복</span>
+        </div>
+        <div class="flow">
+          <b><i>05</i>도구와 방법론을 만들었다</b>
+          <span>CAPS · CASM · Craken · Ceal</span>
+        </div>
+        <div class="flow">
+          <b><i>06</i>그래서 제안할 수 있다</b>
+          <span>경험의 총합이 차별성 있는 AX 컨설팅 제안으로</span>
+        </div>
+      </div>
+      <div class="principle">
+        <p>
+          “코르카는 스스로 검증하지 않은 것을 고객에게 제안하지 않는다.”
+          <small>이 태도를 말이 아니라 문서의 구조 자체로 보여주려 했습니다.</small>
+        </p>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 6. working method -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">제작 방식</p>
+          <h2>한 번의 프롬프트가 아니라,<br />80~90개의 작은 지시</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <div class="cols">
+        <div class="body">
+          <p>
+            Codex에게 한 번에 완성본을 요구하지 않았습니다. 사람이 <b>편집장 · 크리에이티브 디렉터 ·
+            고객 관점 리뷰어</b>로서 방향과 판단 기준을 제시하고, Codex는 HTML/CSS 수정과
+            PDF 변환을 반복 실행했습니다.
+          </p>
+          <p>
+            수정 요청이 구체적일수록 반영은 빨랐고, 같은 스타일 규칙이 문서 전체에 일관되게
+            적용되었습니다. 모든 편집 히스토리와 의사결정은 대화에 남았습니다.
+          </p>
+        </div>
+        <div>
+          <p class="col-label">실제 지시 예시</p>
+          <div class="chips">
+            <div class="chip">이 타이틀을 92%로 줄여라</div>
+            <div class="chip">본문 중 작은 텍스트만 15% 키워라</div>
+            <div class="chip">하단 주석은 McKinsey 방식처럼 작게 내려라</div>
+            <div class="chip">커버 이미지를 더 밝고 신뢰감 있는 바다로 바꿔라</div>
+            <div class="chip">범고래가 텍스트와 겹치지 않게 배치해라</div>
+            <div class="chip">PDF 페이지를 PNG로 렌더링해 깨짐을 확인해라</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 7. workflow -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">워크플로</p>
+          <h2>HTML이 디자인 원본,<br />브라우저가 리뷰 도구</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <div class="loop-row">
+        <div class="loop-step">
+          <i>01</i>
+          <b>HTML/CSS로<br />문서 설계</b>
+          <span>A4 페이지 구조, 브랜드 폰트와 컬러, 정보 위계</span>
+        </div>
+        <div class="loop-step">
+          <i>02</i>
+          <b>브라우저 프리뷰<br />+ 주석 지시</b>
+          <span>사람이 한 페이지씩 보며 디테일을 지시</span>
+        </div>
+        <div class="loop-step">
+          <i>03</i>
+          <b>Codex가<br />수정</b>
+          <span>HTML/CSS를 고쳐 즉시 반영</span>
+        </div>
+        <div class="loop-step">
+          <i>04</i>
+          <b>PDF로<br />export</b>
+          <span>실제 산출물 기준으로 재생성</span>
+        </div>
+        <div class="loop-step">
+          <i>05</i>
+          <b>PNG 렌더로<br />검증</b>
+          <span>실제 보이는 결과로 깨짐 확인 후 <span class="loop-back">다시 ②로 ↺</span></span>
+        </div>
+      </div>
+      <div class="grow"></div>
+      <div class="benefit-row">
+        <div class="benefit">
+          수정이 즉시, 일관되게 반영
+          <small>같은 스타일 규칙을 전체 문서에 적용</small>
+        </div>
+        <div class="benefit">
+          산출물 기준의 검수 루프
+          <small>화면이 아니라 최종 PDF·PNG로 확인</small>
+        </div>
+        <div class="benefit">
+          의사결정 히스토리 보존
+          <small>편집 과정과 이유가 대화에 그대로 남음</small>
+        </div>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 8. lesson (dark) -->
+    <section class="slide dark pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">Lesson</p>
+          <h2>사람은 판단을,<br />AI는 반복 실행을</h2>
+        </div>
+        <img class="logo-white" style="width: 92px; height: auto; margin-top: 4px" src="./assets/corca-logo-white.png" alt="Corca" />
+      </div>
+      <div class="role-grid">
+        <div class="role">
+          <h3>사람이 잡은 것</h3>
+          <p>독자 정의, 핵심 메시지, 설득 구조, 증거의 선별, 디자인 판단 기준</p>
+        </div>
+        <div class="role">
+          <h3>AI가 맡은 것</h3>
+          <p>HTML/CSS 반복 편집, PDF 변환, 렌더링 검증, 80~90개 수정 작업의 실행</p>
+        </div>
+      </div>
+      <div class="grow"></div>
+      <p class="closing">
+        AX는 도구 도입만으로 완성되지 않습니다. 사람이 방향을 잡고, AI가 반복 실행을 돕고,
+        그 경험이 조직 안에서 복제될 때 변화가 일어납니다.
+        <small>이 보고서의 제작 과정 자체가, 코르카가 고객에게 전하려는 AX 메시지를 증명하는 작은 사례입니다.</small>
+      </p>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+
+    <!-- 9. presenter guide -->
+    <section class="slide pad">
+      <div class="slide-header">
+        <div>
+          <p class="eyebrow">부록</p>
+          <h2>5분 발표 가이드</h2>
+        </div>
+        <img class="logo-blue" src="./assets/corca-logo-blue.png" alt="Corca" />
+      </div>
+      <div class="guide-rows">
+        <div class="guide-row">
+          <span class="time">0:00–0:40</span>
+          <span class="topic">결론</span>
+          <span class="msg">AI로 예쁜 PDF를 만든 사례가 아니라, 결정권자가 30초 안에 핵심을 이해하는 제안서를 만든 사례</span>
+        </div>
+        <div class="guide-row">
+          <span class="time">0:40–1:20</span>
+          <span class="topic">문제의식</span>
+          <span class="msg">내용을 주지 않고 외형만 꾸미게 하면 AI slop — 먼저 읽고, 독자를 정의하고, 설득 구조를 잡는다</span>
+        </div>
+        <div class="guide-row">
+          <span class="time">1:20–2:10</span>
+          <span class="topic">독자</span>
+          <span class="msg">바쁜 의사결정자 — 빠르게 훑어도 ‘왜 AX인지, 왜 코르카인지, 무엇이 달라지는지’가 보여야 한다</span>
+        </div>
+        <div class="guide-row">
+          <span class="time">2:10–3:10</span>
+          <span class="topic">메시지 구조</span>
+          <span class="msg">왜 AX → 실행해왔다 → 증거 → 내부 검증 → 도구와 방법론 → 그래서 제안할 수 있다</span>
+        </div>
+        <div class="guide-row">
+          <span class="time">3:10–4:10</span>
+          <span class="topic">작업 방식</span>
+          <span class="msg">80~90개의 작은 지시를 순차 제공 — HTML을 원본으로 수정·export·렌더 확인을 반복</span>
+        </div>
+        <div class="guide-row">
+          <span class="time">4:10–5:00</span>
+          <span class="topic">Lesson</span>
+          <span class="msg">중요한 것은 툴이 아니라 판단 기준 — 사람이 독자·메시지·증거를 잡고 AI가 반복 실행을 맡는다</span>
+        </div>
+      </div>
+      <div class="footer"><span>Corca · AX 보고서 제작 회고</span><span class="folio"></span></div>
+    </section>
+  </body>
+</html>
