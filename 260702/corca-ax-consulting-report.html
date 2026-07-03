@@ -113,8 +113,8 @@
 
       .track-merged-page a,
       .track-merged-page a:visited,
-      .closing-page a,
-      .closing-page a:visited {
+      .final-orca-page a,
+      .final-orca-page a:visited {
         color: rgba(255, 255, 255, 0.96);
         text-decoration: underline;
         text-decoration-thickness: 0.06em;
@@ -1368,18 +1368,11 @@
         font-size: 14pt;
       }
 
-      .closing-page {
-        background:
-          radial-gradient(circle at 8% 96%, rgba(0, 0, 28, 0.94) 0, rgba(0, 0, 28, 0.66) 24%, rgba(0, 0, 28, 0) 48%),
-          radial-gradient(circle at 84% 12%, rgba(0, 116, 183, 0.62) 0, rgba(0, 82, 135, 0.28) 34%, rgba(0, 82, 135, 0) 58%),
-          linear-gradient(132deg, #03142f 0%, #053d67 53%, #064b79 100%);
-        color: #fff;
-      }
-
-      .closing-content {
+      .final-orca-content {
         position: absolute;
-        top: 17mm;
-        left: 13mm;
+        z-index: 1;
+        top: 42mm;
+        left: 18mm;
         width: 120mm;
         color: #fff;
         font-family: var(--sans);
@@ -1388,7 +1381,7 @@
         line-height: 1.38;
       }
 
-      .closing-content p {
+      .final-orca-content p {
         margin: 0 0 3.5mm;
       }
 
@@ -1984,18 +1977,15 @@
       <div class="footer"><span>코르카 AX 가속화 컨설팅</span><span></span></div>
     </section>
 
-    <section class="page closing-page">
-      <div class="closing-content">
-        <p>코르카 AX 가속화 컨설팅<br />2026년 6월 26일</p>
-        <p>Copyright © Corca, Inc.</p>
-        <p><a href="https://www.corca.ai">www.corca.ai</a></p>
-      </div>
-    </section>
-
     <section class="page chapter-image final-orca-page">
       <img src="./assets/orca-chapter-5.png" alt="" />
       <div class="chapter-brand">
         <img class="logo-white" src="./assets/corca_logo_white.svg" alt="Corca" />
+      </div>
+      <div class="final-orca-content">
+        <p>코르카 AX 가속화 컨설팅<br />2026년 6월 26일</p>
+        <p>Copyright © Corca, Inc.</p>
+        <p><a href="https://www.corca.ai">www.corca.ai</a></p>
       </div>
       <div class="footer dark-footer"><span>코르카 AX 가속화 컨설팅</span><span></span></div>
     </section>
